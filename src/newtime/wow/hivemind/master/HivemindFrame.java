@@ -2,6 +2,7 @@ package newtime.wow.hivemind.master;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
@@ -85,10 +86,17 @@ public class HivemindFrame implements Runnable {
     }
 
     private void renderClient(HivemindClient client, Graphics g){
-        Point playerPosition = client.player.getPosition();
+        Point2D playerPosition = client.player.getPosition();
 
         g.setColor(Color.RED);
-        g.fillOval(playerPosition.x-16, playerPosition.y-16, 32, 32);
+
+        double x = playerPosition.getX()-16;
+        double y = playerPosition.getY()-16;
+
+        x = (x / 100) * this.canvas.getWidth();
+        y = (y / 100) * this.canvas.getHeight();
+
+        g.fillOval((int)x, (int)y, 32, 32);
     }
 
 }

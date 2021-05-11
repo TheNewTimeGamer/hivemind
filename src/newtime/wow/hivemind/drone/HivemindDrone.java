@@ -3,6 +3,7 @@ package newtime.wow.hivemind.drone;
 import newtime.wow.hivemind.master.HivemindServer;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,12 +20,15 @@ public class HivemindDrone implements Runnable {
 
     boolean deadSocket = false;
 
-    HivemindDroneScreenReader screenReader = new HivemindDroneScreenReader();
+    HivemindDroneScreenReader screenReader;
 
-    public HivemindDrone(String ip, int port) throws IOException {
+    public HivemindDrone(String ip, int port) throws Exception {
         this.socket = new Socket(ip, port);
         this.in = this.socket.getInputStream();
         this.out = this.socket.getOutputStream();
+
+        this.screenReader = new HivemindDroneScreenReader();
+
         this.start();
     }
 
@@ -68,11 +72,11 @@ public class HivemindDrone implements Runnable {
     }
 
     private void sendPollData() throws IOException {
-        Point position = screenReader.getPosition();
+        Point2D position = screenReader.getPosition();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.putInt(screenReader.getMapID());
-        buffer.putInt(position.x);
-        buffer.putInt(position.y);
+        buffer.putDouble(position.getX());
+        buffer.putDouble(position.getY());
         buffer.putDouble(screenReader.getFace());
         buffer.putInt(screenReader.getHealth());
         buffer.putInt(screenReader.getMaximumHealth());

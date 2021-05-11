@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Startup {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         if(args.length > 0){
             if (args[0].startsWith("client=")) {
                 startAsDrone(args[0].split("=")[1].split(":"));
@@ -18,7 +18,7 @@ public class Startup {
         }
     }
 
-    private static void startAsDrone(String[] args) throws IOException {
+    private static void startAsDrone(String[] args) throws Exception {
         HivemindDrone drone = new HivemindDrone(args[0], Integer.parseInt(args[1]));
     }
 

@@ -1,6 +1,7 @@
 package newtime.wow.hivemind.master;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -34,7 +35,7 @@ public class PlayerData {
     }
 
     private int currentMapID;
-    private Point position = new Point(0,0);
+    private Point2D position = new Point2D.Double(0,0);
     private double face;
     private long pollLimit = 100;
     private long lastPoll = 0;
@@ -95,8 +96,7 @@ public class PlayerData {
         try {
             ByteBuffer buffer = ByteBuffer.wrap(response);
             this.currentMapID = buffer.getInt();
-            this.position.x = buffer.getInt();
-            this.position.y = buffer.getInt();
+            this.position.setLocation(buffer.getDouble(),buffer.getDouble());
             this.face = buffer.getDouble();
 
             this.health.current = buffer.getInt();
@@ -110,7 +110,7 @@ public class PlayerData {
         return true;
     }
 
-    public Point getPosition(){
+    public Point2D getPosition(){
         poll();
         return this.position;
     }
