@@ -40,6 +40,19 @@ public class HivemindDroneScreenReader {
         return this.mapID;
     }
 
+    public void setMapID(Color color){
+        double red = color.getRed();
+        double green = color.getGreen();
+
+        red /= 255;
+        green /= 255;
+
+        int redPartial = (int) (red * 100);
+        int greenPartial = (int) (green * 100);
+
+        this.mapID = (redPartial * 100) + greenPartial;
+    }
+
     public double getFace(){
         poll();
         return this.face;
@@ -83,8 +96,11 @@ public class HivemindDroneScreenReader {
         Dimension screenResolution = Toolkit.getDefaultToolkit().getScreenSize();
         this.screen = this.robot.createScreenCapture(new Rectangle(0,0,screenResolution.width,screenResolution.height));
 
-        Color positionFace = new Color(this.screen.getRGB(32,0));
+        Color positionFace = new Color(this.screen.getRGB((screenResolution.width/2)-10,2));
         this.setPositionFace(positionFace);
+
+        Color mapID = new Color(this.screen.getRGB(screenResolution.width/2+10, 2));
+        this.setMapID(mapID);
 
         return true;
     }

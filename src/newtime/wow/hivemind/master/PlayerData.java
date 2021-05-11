@@ -34,7 +34,7 @@ public class PlayerData {
         this.hivemindClient = hivemindClient;
     }
 
-    private int currentMapID;
+    private int mapID;
     private Point2D position = new Point2D.Double(0,0);
     private double face;
     private long pollLimit = 100;
@@ -95,7 +95,7 @@ public class PlayerData {
     public boolean processPollResponse(byte[] response){
         try {
             ByteBuffer buffer = ByteBuffer.wrap(response);
-            this.currentMapID = buffer.getInt();
+            this.mapID = buffer.getInt();
             this.position.setLocation(buffer.getDouble(),buffer.getDouble());
             this.face = buffer.getDouble();
 
@@ -117,6 +117,11 @@ public class PlayerData {
 
     public double getFace(){
         return this.face;
+    }
+
+    public int getMapID(){
+        poll();
+        return this.mapID;
     }
 
     public int getHealth(){

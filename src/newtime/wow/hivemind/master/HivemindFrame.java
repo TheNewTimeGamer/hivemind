@@ -1,10 +1,14 @@
 package newtime.wow.hivemind.master;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HivemindFrame implements Runnable {
 
@@ -14,6 +18,10 @@ public class HivemindFrame implements Runnable {
 
     private Canvas canvas = new Canvas();
     private Thread renderThread = new Thread(this);
+
+    private int selectedClient = 0;
+
+    HashMap<Integer, BufferedImage> mapTextures = new HashMap<Integer, BufferedImage>();
 
     public HivemindFrame(HivemindServer hivemindServer){
         this.hiveMindServer = hivemindServer;
@@ -64,10 +72,37 @@ public class HivemindFrame implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
+        drawMap(g);
         renderClients(g);
 
         g.dispose();
         bs.show();
+    }
+
+    private void drawMap(Graphics g){
+        if(this.selectedClient < 0 || this.selectedClient >= hiveMindServer.clients.size()){
+            return;
+        }
+        BufferedImage map = getMapTexture(this.hiveMindServer.clients.get(this.selectedClient).player.getMapID());
+        if(map != null){
+            g.drawImage(map, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
+        }
+    }
+
+    private BufferedImage getMapTexture(int mapID){
+        BufferedImage mapTexture = this.mapTextures.get(Integer.valueOf(mapID));
+        if (mapTexture == null) {
+            File file = new File("maps/" + mapID + ".png");
+            try {
+                System.out.println("No map file loaded for: " + mapID + ". Loading..");
+                mapTexture = ImageIO.read(file);
+                this.mapTextures.put(Integer.valueOf(mapID), mapTexture);
+            }catch(Exception e) {
+                System.out.println("Failed to find map: " + file.getPath());
+                return null;
+            }
+        }
+        return mapTexture;
     }
 
     private void renderClients(Graphics g){
@@ -87,14 +122,17 @@ public class HivemindFrame implements Runnable {
 
     private void renderClient(HivemindClient client, Graphics g){
         Point2D playerPosition = client.player.getPosition();
+        int mapID = client.player.getMapID();
 
         g.setColor(Color.RED);
 
-        double x = playerPosition.getX()-16;
-        double y = playerPosition.getY()-16;
+        double x = playerPosition.getX();
+        double y = playerPosition.getY();
 
-        x = (x / 100) * this.canvas.getWidth();
-        y = (y / 100) * this.canvas.getHeight();
+        x = ((x / 100) * this.canvas.getWidth()) - 16;
+        y = ((y / 100) * this.canvas.getHeight()) - 16;
+
+
 
         g.fillOval((int)x, (int)y, 32, 32);
     }
