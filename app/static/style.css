@@ -1,0 +1,28 @@
+
+body {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    color: whitesmoke;
+}
+
+canvas {
+    position: relative;
+    display: inline-block;
+    background-color: rgb(37, 37, 37);
+    margin-left: 5%;
+    margin-top: 2.5%;
+    width: 33%;
+    height: 33%;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+#container {
+    display: inline-block;
+    width: 100%;
+}

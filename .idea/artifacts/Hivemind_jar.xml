@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Hivemind:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Hivemind_jar</output-path>
-    <root id="archive" name="Hivemind.jar">
-      <element id="module-output" name="Hivemind" />
-    </root>
-  </artifact>
-</component>
