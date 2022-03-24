@@ -32,6 +32,8 @@ public class HivemindDroneScreenReader {
 
     private int level;
 
+    private Color[] rotation = new Color[3];
+
     private boolean poll(){
         if(System.currentTimeMillis() - lastPoll > pollLimit){
             lastPoll = System.currentTimeMillis();
@@ -111,6 +113,11 @@ public class HivemindDroneScreenReader {
         return this.level;
     }
 
+    public Color[] getRotation() {
+        poll();
+        return this.rotation;
+    }
+
     private Color getColorAt(int x, int y){
         return new Color(this.screen.getRGB(x, y));
     }
@@ -137,6 +144,10 @@ public class HivemindDroneScreenReader {
 
         this.level = (int) ((levelColor / 255) * 100);
         this.xp = (int) ((xpColor / 255) * 100);
+
+        this.rotation[0] = getColorAt(125, 25);
+        this.rotation[1] = getColorAt(180, 25);
+        this.rotation[2] = getColorAt(230, 25);
 
         return true;
     }

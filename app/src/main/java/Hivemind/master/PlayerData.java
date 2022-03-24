@@ -20,6 +20,8 @@ public class PlayerData {
     public Resource xp = new Resource(0,100);
     public Resource level = new Resource(0,60);
 
+    public int[] rotation = null;
+
     public PlayerData(){
         this.playerID = "C:" + Math.abs(new Random().nextLong() / 2);
     }

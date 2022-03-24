@@ -2,6 +2,7 @@ package Hivemind.drone;
 
 import Hivemind.master.HivemindServer;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,6 +68,10 @@ public class HivemindDrone implements Runnable {
         String trimmed = new String(buffer).trim();
         if(trimmed.equals(new String(HivemindServer.POLL_MESSAGE).trim())){
             sendPollData();
+            return;
+        }
+        if(trimmed.startsWith("Perform:")) {
+            String action = trimmed.split("Perform:")[1];
         }
     }
 
@@ -84,6 +89,16 @@ public class HivemindDrone implements Runnable {
         buffer.putInt(screenReader.getXp());
         buffer.putInt(screenReader.getMaximumXp());
         buffer.putInt(screenReader.getLevel());
+
+        Color[] rotation = screenReader.getRotation();
+        for(Color c : rotation) {
+            if(c.getRed() == 0 && c.getGreen() == 0 && c.getBlue() == 0){
+                continue;
+            }
+            buffer.putInt(c.getRGB());
+            break;
+        }
+
         out.write(buffer.array());
         out.flush();
     }

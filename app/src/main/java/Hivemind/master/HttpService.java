@@ -9,7 +9,7 @@ import com.sun.net.httpserver.*;
 
 public class HttpService {
 
-    public static String rootDirectory = "static/";
+    public static String rootDirectory = "app/static/";
 
     public static final HashMap<String,String> MIME = new HashMap<String, String>();
     static {
@@ -73,6 +73,7 @@ class StaticHandler implements HttpHandler {
         }
 
         File file = new File(HttpService.rootDirectory + path);
+        System.out.println("Serving: " + file.getAbsolutePath());
         if(!file.exists()) {
             HttpService.sendErrorResponse(exchange, 404, null, "File Not Found.".getBytes());
             return;

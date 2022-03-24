@@ -3,17 +3,87 @@
  */
 package Hivemind;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class App {
 
+    private static JFrame startupFrame;
+
+    private static JLabel ipLabel;
+    private static JLabel portLabel;
+
+    private static JTextField startupFrameIpField;
+    private static JTextField startupFramePortField;
+
+    private static JCheckBox checkBoxMaster;
+    private static JCheckBox checkBoxDrone;
+
+    private static JButton startButton;
+
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(args));
-        System.out.print("Launching..");
-        try {
-            Startup.start(args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        App.startupFrame = new JFrame();
+        App.startupFrame.setSize(350, 200);
+
+        App.ipLabel = new JLabel("Ip:");
+        App.portLabel = new JLabel("Port:");
+
+        App.startupFrameIpField = new JTextField("localhost");
+        App.startupFramePortField = new JTextField("4444");
+
+        App.checkBoxMaster = new JCheckBox("Start as Master", false);
+        App.checkBoxDrone = new JCheckBox("Start as Drone", true);
+
+        App.startButton = new JButton("Start");
+
+        App.ipLabel.setBounds(2,0, startupFrame.getWidth()-100,20);
+        App.portLabel.setBounds(startupFrame.getWidth()-100,0,85,20);
+
+        startupFrameIpField.setBounds(0,25, startupFrame.getWidth()-100,20);
+        startupFramePortField.setBounds(startupFrame.getWidth()-100,25,85,20);
+
+        checkBoxMaster.setBounds(0,50,startupFrame.getWidth(),20);
+        checkBoxDrone.setBounds(0,75,startupFrame.getWidth(),20);
+
+        App.startButton.setBounds(0,startupFrame.getHeight()-65,startupFrame.getWidth()-16, 25);
+
+        App.startupFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        App.startupFrame.setLocationRelativeTo(null);
+        App.startupFrame.setLayout(null);
+
+        App.startupFrame.add(ipLabel);
+        App.startupFrame.add(portLabel);
+
+        App.startupFrame.add(startupFrameIpField);
+        App.startupFrame.add(startupFramePortField);
+
+        App.startupFrame.add(checkBoxMaster);
+        App.startupFrame.add(checkBoxDrone);
+
+        App.startupFrame.add(startButton);
+
+        App.startupFrame.setVisible(true);
+
+        App.startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                boolean both = App.checkBoxDrone.isSelected() && App.checkBoxMaster.isSelected();
+                String ip = App.startupFrameIpField.getText();
+                int port = Integer.parseInt(App.startupFramePortField.getText());
+                if(both){
+                    Startup.startBoth(ip, port);
+                }else{
+                    if(App.checkBoxMaster.isSelected()){
+                        Startup.startAsMaster(port);
+                    }else {
+                        Startup.startAsDrone(ip, port);
+                    }
+                }
+                App.startupFrame.dispose();
+            }
+        });
+
     }
 }

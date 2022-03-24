@@ -8,24 +8,32 @@ import Hivemind.master.HivemindServer;
 
 public class Startup {
 
-    public static void start(String[] args) throws Exception {
-        if(args.length > 0){
-            System.out.println(" As drone.");
-            if (args[0].startsWith("client=")) {
-                Startup.startAsDrone(args[0].split("=")[1].split(":"));
+    public static void startBoth(String ip, int port) {
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                startAsMaster(port);
             }
-        }else{
-            System.out.println(" As server.");
-            Startup.startAsMaster();
+        });
+        thread.start();
+        startAsDrone(ip, port);
+    }
+
+    public static void startAsDrone(String ip, int port) {
+        try {
+            new HivemindDrone(ip,port);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
         }
     }
 
-    public static void startAsDrone(String[] args) throws Exception {
-        new HivemindDrone(args[0], Integer.parseInt(args[1]));
-    }
-
-    public static void startAsMaster() throws IOException {
-        HivemindServer server = new HivemindServer(4444);
+    public static void startAsMaster(int port) {
+        try {
+            HivemindServer server = new HivemindServer(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
 }

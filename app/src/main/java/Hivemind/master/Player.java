@@ -1,5 +1,6 @@
 package Hivemind.master;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -100,10 +101,22 @@ public class Player {
             this.playerData.xp.maximum = buffer.getInt();
 
             this.playerData.level.current = buffer.getInt();
+
+            this.playerData.rotation = convertRGB(buffer.getInt());
+
         }catch(Exception e){
             return false;
         }
         return true;
+    }
+
+    public int[] convertRGB(int rgb) {
+        Color color = new Color(rgb);
+        return new int[] {
+            color.getRed(),
+            color.getGreen(),
+            color.getBlue()
+        };
     }
 
     public Point2D getPosition(){
@@ -138,6 +151,11 @@ public class Player {
     public int getMaximumMana(){
         poll();
         return this.playerData.mana.maximum;
+    }
+
+    public int[] getRotation(){
+        poll();
+        return this.playerData.rotation;
     }
 
 }
